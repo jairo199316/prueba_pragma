@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:repaso/screens/home_screen.dart';
+import 'package:prueba_pragma/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
