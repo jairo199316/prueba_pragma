@@ -13,8 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<CatInformation>> _catsInformation;
-  late List<CatInformation> _catsInformationFilter;
+  late List<CatInformation> _catsInformation = [];
+  late List<CatInformation> _catsInformationFilter = [];
 
   Future<List<CatInformation>> _getCatsInformation() async {
     var headers = {
@@ -46,256 +46,281 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _catsInformation = _getCatsInformation();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    final data = await _getCatsInformation();
+    setState(() {
+      _catsInformation = data;
+      _catsInformationFilter = data;
+    });
+  }
+
+  void filterByName(String query) {
+    List<CatInformation> auxCatsInformationList = [];
+    auxCatsInformationList.addAll(_catsInformation);
+    if (query.isNotEmpty) {
+      List<CatInformation> auxCatsInformationData = [];
+      for (var element in auxCatsInformationList) {
+        if (element.name.toLowerCase().startsWith(query.toLowerCase())) {
+          auxCatsInformationData.add(element);
+        }
+      }
+      setState(() {
+        _catsInformationFilter = auxCatsInformationData;
+      });
+    } else {
+      setState(() {
+        _catsInformationFilter = _catsInformation;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _catsInformation,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                tileMode: TileMode.clamp,
-                colors: <Color>[
-                  Color(0xFFA0EAF8),
-                  Color(0xFF98F9B5),
-                ],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          tileMode: TileMode.clamp,
+          colors: <Color>[
+            Color(0xFFA0EAF8),
+            Color(0xFF98F9B5),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(toolbarHeight: 0),
+        body: Column(
+          children: [
+            const SizedBox(height: 25),
+            const Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Catbreeds',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Color(0xFF333333)),
               ),
             ),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(toolbarHeight: 0),
-              body: Column(
-                children: [
-                  const SizedBox(height: 25),
-                  const Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Catbreeds',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                          color: Color(0xFF333333)),
-                    ),
+            const SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: TextField(
+                onChanged: (query) {
+                  filterByName(query);
+                },
+                decoration: const InputDecoration(
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search_off_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
-                  const SizedBox(height: 25),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 20),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 5, color: Colors.transparent),
-                                borderRadius: BorderRadius.circular(30),
-                                color: Colors.white),
-                            child: Column(
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _catsInformationFilter.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 5, color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, top: 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 5,
-                                              color: const Color(0xFFE0E0E0)),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Icon(
-                                                  Icons
-                                                      .card_membership_outlined,
-                                                  color: Color(0xFF2D9CDB)),
-                                              Text(
-                                                _getName(
-                                                    snapshot.data![index].name),
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    color: Color(0xFF666666)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                width: 5,
-                                                color: const Color(0xFFE0E0E0)),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: const Color(0xFF98F9B5)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      DetailScreen(
-                                                    catInformation:
-                                                        snapshot.data![index],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: const Row(
-                                              children: [
-                                                Icon(Icons.remove_red_eye,
-                                                    color: Color(0xFF2D9CDB)),
-                                                Text(
-                                                  "See more",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18,
-                                                      color: Color(0xFF666666)),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 5,
+                                        color: const Color(0xFFE0E0E0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                            Icons.card_membership_outlined,
+                                            color: Color(0xFF2D9CDB)),
+                                        Text(
+                                          _getName(_catsInformationFilter[index]
+                                              .name),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Color(0xFF666666)),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(height: 25),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 200,
-                                      width: 220,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(width: 5),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Image.network(
-                                          _getURLImage(snapshot
-                                                  .data![index].imageId) ??
-                                              "",
-                                          fit: BoxFit.fill, errorBuilder:
-                                              (BuildContext context,
-                                                  Object exception,
-                                                  StackTrace? stackTrace) {
-                                        return Image.asset(
-                                          "assets/images/defaultcat.png",
-                                          fit: BoxFit.fill,
-                                        );
-                                      }),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 5,
+                                          color: const Color(0xFFE0E0E0)),
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: const Color(0xFF98F9B5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 25),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20, bottom: 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 5,
-                                              color: const Color(0xFFE0E0E0)),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DetailScreen(
+                                              catInformation:
+                                                  _catsInformationFilter[index],
+                                            ),
                                           ),
-                                          child: Row(
-                                            children: [
-                                              const Icon(Icons.location_on,
-                                                  color: Color(0xFF2D9CDB)),
-                                              Text(
-                                                _getOrigin(snapshot
-                                                    .data![index].origin),
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    color: Color(0xFF666666)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
+                                        );
+                                      },
+                                      child: const Row(
+                                        children: [
+                                          Icon(Icons.remove_red_eye,
+                                              color: Color(0xFF2D9CDB)),
+                                          Text(
+                                            "See more",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                                color: Color(0xFF666666)),
+                                          )
+                                        ],
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 5,
-                                              color: const Color(0xFFE0E0E0)),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Icon(
-                                                  Icons.lightbulb_rounded,
-                                                  color: Color(0xFF2D9CDB)),
-                                              Text(
-                                                snapshot
-                                                    .data![index].intelligence,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    color: Color(0xFF666666)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
                           ),
-                        );
-                      },
+                          const SizedBox(height: 25),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 200,
+                                width: 220,
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Image.network(
+                                    _getURLImage(_catsInformationFilter[index]
+                                            .imageId) ??
+                                        "",
+                                    fit: BoxFit.fill, errorBuilder:
+                                        (BuildContext context, Object exception,
+                                            StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    "assets/images/defaultcat.png",
+                                    fit: BoxFit.fill,
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 25),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 5,
+                                        color: const Color(0xFFE0E0E0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.location_on,
+                                            color: Color(0xFF2D9CDB)),
+                                        Text(
+                                          _getOrigin(
+                                              _catsInformationFilter[index]
+                                                  .origin),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Color(0xFF666666)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 5,
+                                        color: const Color(0xFFE0E0E0)),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.lightbulb_rounded,
+                                            color: Color(0xFF2D9CDB)),
+                                        Text(
+                                          _catsInformationFilter[index]
+                                              .intelligence,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Color(0xFF666666)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                  );
+                },
               ),
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
+            )
+          ],
+        ),
+      ),
     );
   }
 
