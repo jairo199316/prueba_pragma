@@ -3,6 +3,8 @@ import 'package:prueba_pragma/models/cat_information.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:prueba_pragma/screens/detail_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<CatInformation>> _catsInformation;
+  late List<CatInformation> _catsInformationFilter;
 
   Future<List<CatInformation>> _getCatsInformation() async {
     var headers = {
@@ -27,10 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
       final jsonData = jsonDecode(body);
       for (var catInformation in jsonData) {
         catsInformation.add(CatInformation(
-            catInformation["name"],
-            catInformation["origin"],
-            catInformation["intelligence"].toString(),
-            catInformation["reference_image_id"]));
+          catInformation["name"],
+          catInformation["origin"],
+          catInformation["intelligence"].toString(),
+          catInformation["reference_image_id"],
+          catInformation["description"],
+        ));
       }
       return catsInformation;
     } else {
@@ -140,23 +145,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(50),
                                             color: const Color(0xFF98F9B5)),
-                                        child: const Padding(
-                                          padding: EdgeInsets.only(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
                                             left: 20,
                                             right: 20,
                                           ),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.remove_red_eye,
-                                                  color: Color(0xFF2D9CDB)),
-                                              Text(
-                                                "Ver mas",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    color: Color(0xFF666666)),
-                                              )
-                                            ],
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailScreen(
+                                                    catInformation:
+                                                        snapshot.data![index],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: const Row(
+                                              children: [
+                                                Icon(Icons.remove_red_eye,
+                                                    color: Color(0xFF2D9CDB)),
+                                                Text(
+                                                  "See more",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                      color: Color(0xFF666666)),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       )
