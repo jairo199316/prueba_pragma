@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prueba_pragma/blocs/cat_information_bloc.dart';
+import 'package:prueba_pragma/repositories/cat_information_repository.dart';
 import 'package:prueba_pragma/screens/home_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -15,9 +18,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: BlocProvider(
+        create: (context) => CatInformationBloc(CatInformationRepository()),
+        child: const HomeScreen(),
+      ),
     );
   }
 }

@@ -15,7 +15,7 @@ class CardInfoCatInformation extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final Function(CatInformation)? method;
+  final Function(CatInformation, BuildContext context)? method;
   final CatInformation? catInformation;
   final Color color;
 
@@ -35,7 +35,7 @@ class CardInfoCatInformation extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: () {
-              method!(catInformation!);
+              method!(catInformation!, context);
             },
             child: Row(
               children: [
