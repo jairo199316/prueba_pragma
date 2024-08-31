@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prueba_pragma/models/cat_information.dart';
 import 'package:prueba_pragma/utilities/colors.dart';
 import 'package:prueba_pragma/utilities/dimens.dart';
+import 'package:prueba_pragma/widgets/modal_info_cat_information.dart';
 
 class CardInfoCatInformation extends StatelessWidget {
   const CardInfoCatInformation({
@@ -35,7 +36,16 @@ class CardInfoCatInformation extends StatelessWidget {
           ),
           child: GestureDetector(
             onTap: () {
-              method!(catInformation!, context);
+              if (method != null) {
+                method!(catInformation!, context);
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ModalInfoCatInformation(icon: icon, label: label);
+                  },
+                );
+              }
             },
             child: Row(
               children: [

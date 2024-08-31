@@ -58,20 +58,21 @@ class HomeScreen extends StatelessWidget {
                       decoration: const InputDecoration(
                         filled: true,
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: borderCardColor),
+                            borderSide:
+                                BorderSide(width: 1, color: borderCardColor),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                borderRadiusSearchInputHomeScreen))
-                        ),
+                                borderRadiusSearchInputHomeScreen))),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: borderCardColor),
+                            borderSide:
+                                BorderSide(width: 1, color: borderCardColor),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                borderRadiusSearchInputHomeScreen))
-                        ),
+                                borderRadiusSearchInputHomeScreen))),
                         fillColor: backgroundLabelCard,
                         hintText: searchHintHomeScreen,
                         prefixIcon: Icon(Icons.search_outlined),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: borderCardColor),
+                          borderSide:
+                              BorderSide(width: 1, color: borderCardColor),
                           borderRadius: BorderRadius.all(Radius.circular(
                               borderRadiusSearchInputHomeScreen)),
                         ),
