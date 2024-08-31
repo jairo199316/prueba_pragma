@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:prueba_pragma/screens/detail_screen.dart';
+import 'package:prueba_pragma/widgets/card_info_cat_information.dart';
+import 'package:prueba_pragma/widgets/tittle_home_screen.dart';
+import 'package:prueba_pragma/widgets/image_card_cat_information.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -97,16 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Column(
           children: [
             const SizedBox(height: 25),
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Catbreeds',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Color(0xFF333333)),
-              ),
-            ),
+            const TittleHomeScreen(),
             const SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -116,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 decoration: const InputDecoration(
                   hintText: "Search",
-                  prefixIcon: Icon(Icons.search_off_outlined),
+                  prefixIcon: Icon(Icons.search_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
@@ -129,187 +123,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: _catsInformationFilter.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                    padding: const EdgeInsets.all(10),
                     child: Container(
                       decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 5, color: Colors.transparent),
+                          border: Border.all(width: 5, color: Colors.transparent),
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.white),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 5,
-                                        color: const Color(0xFFE0E0E0)),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                            Icons.card_membership_outlined,
-                                            color: Color(0xFF2D9CDB)),
-                                        Text(
-                                          _getName(_catsInformationFilter[index]
-                                              .name),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Color(0xFF666666)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 5,
-                                          color: const Color(0xFFE0E0E0)),
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: const Color(0xFF98F9B5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DetailScreen(
-                                              catInformation:
-                                                  _catsInformationFilter[index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: const Row(
-                                        children: [
-                                          Icon(Icons.remove_red_eye,
-                                              color: Color(0xFF2D9CDB)),
-                                          Text(
-                                            "See more",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Color(0xFF666666)),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 25),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                height: 200,
-                                width: 220,
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 5),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Image.network(
-                                    _getURLImage(_catsInformationFilter[index]
-                                            .imageId) ??
-                                        "",
-                                    fit: BoxFit.fill, errorBuilder:
-                                        (BuildContext context, Object exception,
-                                            StackTrace? stackTrace) {
-                                  return Image.asset(
-                                    "assets/images/defaultcat.png",
-                                    fit: BoxFit.fill,
-                                  );
-                                }),
+                              CardInfoCatInformation(
+                                icon: Icons.card_membership_outlined,
+                                label: _catsInformationFilter[index].name,
+                                color: Colors.white,
                               ),
+                              CardInfoCatInformation(
+                                  icon: Icons.remove_red_eye,
+                                  label: "See more",
+                                  method: goToDetailScreen,
+                                  catInformation: _catsInformationFilter[index],
+                                  color: const Color(0xFF98F9B5))
                             ],
                           ),
-                          const SizedBox(height: 25),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, bottom: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 5,
-                                        color: const Color(0xFFE0E0E0)),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.location_on,
-                                            color: Color(0xFF2D9CDB)),
-                                        Text(
-                                          _getOrigin(
-                                              _catsInformationFilter[index]
-                                                  .origin),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Color(0xFF666666)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 5,
-                                        color: const Color(0xFFE0E0E0)),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.lightbulb_rounded,
-                                            color: Color(0xFF2D9CDB)),
-                                        Text(
-                                          _catsInformationFilter[index]
-                                              .intelligence,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Color(0xFF666666)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          ImageCardCatInformation(
+                              imageId: _catsInformationFilter[index].imageId),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CardInfoCatInformation(
+                                  icon: Icons.location_on,
+                                  label: _catsInformationFilter[index].origin,
+                                  color: Colors.white),
+                              CardInfoCatInformation(
+                                  icon: Icons.lightbulb_rounded,
+                                  label:
+                                      _catsInformationFilter[index].intelligence,
+                                  color: Colors.white),
+                            ],
                           )
                         ],
                       ),
@@ -324,24 +176,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String? _getURLImage(String? imageId) {
-    if (imageId != null) {
-      return "https://cdn2.thecatapi.com/images/$imageId.jpg";
-    }
-    return null;
-  }
-
-  String _getName(String name) {
-    if (name.length <= 10) {
-      return name;
-    }
-    return name.replaceRange(7, name.length, '...');
-  }
-
-  String _getOrigin(String origin) {
-    if (origin.length <= 10) {
-      return origin;
-    }
-    return origin.replaceRange(7, origin.length, '...');
+  void goToDetailScreen(CatInformation catInformation) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailScreen(
+          catInformation: catInformation,
+        ),
+      ),
+    );
   }
 }
