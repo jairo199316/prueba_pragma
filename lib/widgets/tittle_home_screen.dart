@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_pragma/utilities/colors.dart';
+import 'package:prueba_pragma/utilities/dimens.dart';
+import 'package:prueba_pragma/utilities/strings.dart';
 
 class TittleHomeScreen extends StatelessWidget {
   const TittleHomeScreen({super.key});
@@ -8,11 +11,11 @@ class TittleHomeScreen extends StatelessWidget {
     return const Align(
       alignment: Alignment.center,
       child: Text(
-        'Catbreeds',
+        tittleHomeScreen,
         style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 25,
-            color: Color(0xFF333333)),
+            fontSize: sizeTittleHomeScreen,
+            color: tittleColor),
       ),
     );
   }

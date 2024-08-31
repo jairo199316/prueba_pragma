@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_pragma/models/cat_information.dart';
+import 'package:prueba_pragma/utilities/colors.dart';
+import 'package:prueba_pragma/utilities/dimens.dart';
+import 'package:prueba_pragma/utilities/strings.dart';
+import 'package:prueba_pragma/widgets/description_detail_screen.dart';
+import 'package:prueba_pragma/widgets/header_image_detail_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.catInformation});
@@ -20,8 +25,8 @@ class _DetailScreenState extends State<DetailScreen> {
           end: Alignment.bottomRight,
           tileMode: TileMode.clamp,
           colors: <Color>[
-            Color(0xFFA0EAF8),
-            Color(0xFF98F9B5),
+            firstColorApp,
+            secondColorApp,
           ],
         ),
       ),
@@ -34,77 +39,35 @@ class _DetailScreenState extends State<DetailScreen> {
               widget.catInformation.name,
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  color: Color(0xFF333333)),
+                  fontSize: sizeTittleDetailScreen,
+                  color: tittleColor),
             ),
           ),
         ),
         body: Column(
           children: [
-            Image.network(
-                height: 350,
-                width: 500,
-                _getURLImage(widget.catInformation.imageId) ?? "",
-                fit: BoxFit.cover, errorBuilder: (BuildContext context,
-                    Object exception, StackTrace? stackTrace) {
-              return Image.asset(
-                "assets/images/defaultcat.png",
-                fit: BoxFit.fill,
-              );
-            }),
-            const SizedBox(height: 25),
+            HeaderImageDetailScreen(imageId: widget.catInformation.imageId),
+            const SizedBox(height: sizeSpacing),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(Icons.description,
-                    color: Color(0xFF2D9CDB)),
+                Icon(Icons.description, color: iconsColor),
                 Text(
-                  "Description",
+                  desciptionTittleDetailScreen,
                   style: TextStyle(
-                      fontWeight:
-                      FontWeight.bold,
-                      fontSize: 25,
-                      color: Color(0xFF666666)),
+                      fontWeight: FontWeight.bold,
+                      fontSize: sizeTittleDescriptionDetailScreen,
+                      color: descriptionColor),
                 )
               ],
             ),
-            const SizedBox(height: 25),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 5, color: const Color(0xFFE0E0E0)),
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 20, top: 20),
-                      child: Text(widget.catInformation.description,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                              color: Color(0xFF666666)),
-                          textAlign: TextAlign.justify),
-                    ),
-                  ),
-                ),
-              ),
-            )
+            const SizedBox(height: sizeSpacing),
+            DescriptionDetailScreen(
+                description: widget.catInformation.description),
           ],
         ),
       ),
     );
-  }
-
-  String? _getURLImage(String? imageId) {
-    if (imageId != null) {
-      return "https://cdn2.thecatapi.com/images/$imageId.jpg";
-    }
-    return null;
   }
 }

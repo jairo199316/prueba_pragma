@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prueba_pragma/models/cat_information.dart';
+import 'package:prueba_pragma/utilities/colors.dart';
+import 'package:prueba_pragma/utilities/dimens.dart';
 
 class CardInfoCatInformation extends StatelessWidget {
   const CardInfoCatInformation({
@@ -20,17 +22,16 @@ class CardInfoCatInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(paddingLabelInfoCatHomeSreen),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 5, color: const Color(0xFFE0E0E0)),
-          borderRadius: BorderRadius.circular(50),
-          color: color
-        ),
+            border: Border.all(width: sizeBorder, color: borderLabelInfo),
+            borderRadius: BorderRadius.circular(borderLabelInfoCatHomeSreen),
+            color: color),
         child: Padding(
           padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
+            left: paddingLabelInfoCatHomeSreen,
+            right: paddingLabelInfoCatHomeSreen,
           ),
           child: GestureDetector(
             onTap: () {
@@ -38,13 +39,13 @@ class CardInfoCatInformation extends StatelessWidget {
             },
             child: Row(
               children: [
-                Icon(icon, color: const Color(0xFF2D9CDB)),
+                Icon(icon, color: iconsColor),
                 Text(
                   _getLabel(label),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: Color(0xFF666666)),
+                      fontSize: sizeTextLabelInfoCatHomeSreen,
+                      color: descriptionColor),
                 )
               ],
             ),
