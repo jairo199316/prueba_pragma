@@ -25,7 +25,7 @@ void main() {
 
     testWidgets('Load CatInformationList ', (WidgetTester tester) async {
       final mockCatInformation = [
-        CatInformation(
+        const CatInformation(
             name: "Abyssinian",
             origin: "Egypt",
             intelligence: "5",
@@ -33,7 +33,7 @@ void main() {
                 "The Abyssinian is easy to care for, and a joy to have in your home. "
                 "They’re affectionate cats and love both people and other animals.",
             imageId: "0XYvRd7oD"),
-        CatInformation(
+        const CatInformation(
             name: "Aegean",
             origin: "Greece",
             intelligence: "3",
@@ -68,7 +68,7 @@ void main() {
 
     testWidgets('Filter CatInformation by name ', (WidgetTester tester) async {
       final mockCatInformation = [
-        CatInformation(
+        const CatInformation(
             name: "Abyssinian",
             origin: "Egypt",
             intelligence: "5",
@@ -76,7 +76,7 @@ void main() {
                 "The Abyssinian is easy to care for, and a joy to have in your home. "
                 "They’re affectionate cats and love both people and other animals.",
             imageId: "0XYvRd7oD"),
-        CatInformation(
+        const CatInformation(
             name: "Aegean",
             origin: "Greece",
             intelligence: "3",
@@ -115,7 +115,7 @@ void main() {
 
     testWidgets('Navigate to detail screen', (WidgetTester tester) async {
       final mockCatInformation = [
-        CatInformation(
+        const CatInformation(
             name: "Abyssinian",
             origin: "Egypt",
             intelligence: "5",
@@ -123,7 +123,7 @@ void main() {
                 "The Abyssinian is easy to care for, and a joy to have in your home. "
                 "They’re affectionate cats and love both people and other animals.",
             imageId: "0XYvRd7oD"),
-        CatInformation(
+        const CatInformation(
             name: "Aegean",
             origin: "Greece",
             intelligence: "3",
