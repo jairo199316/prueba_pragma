@@ -2,37 +2,37 @@ name: Flutter CI
 
 on:
   push:
-    branches: [ "main" ]   # 👈 corre cuando haces push a main
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]   # 👈 corre cuando alguien abre PR hacia main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      - name: ⚡️ Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'   # 👈 pon la versión que usas (lo vi en tu contexto)
+          flutter-version: '3.24.3' # ajusta a tu versión
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: 🔍 Analyze project
-        run: flutter analyze
+      - name: Generate .env file
+        run: |
+          echo "API_KEY=${{ secrets.API_KEY }}" >> assets/.env
+          echo "URL_BREEDS=${{ secrets.URL_BREEDS }}" >> assets/.env
+          cat assets/.env # debug, puedes quitarlo luego
 
-      - name: ✅ Run tests
-        run: flutter test
-
-      - name: 📦 Build APK
+      - name: Build APK
         run: flutter build apk --release
 
-      - name: 💾 Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload APK to artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
