@@ -139,5 +139,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
 
-macos/
 devtools_options.yaml
+**/.env
