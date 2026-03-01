@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "API_KEY=${{ secrets.API_KEY }}" >> assets/.env
           echo "URL_BREEDS=${{ secrets.URL_BREEDS }}" >> assets/.env
-          cat assets/.env # debug, puedes quitarlo luego
+          cat assets/.env
 
       - name: Build APK
         run: flutter build apk --release
